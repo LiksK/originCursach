@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Room Bookings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #333;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            color: white;
+            font-size: 1.2rem;
+        }
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+        .content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .bookings-table th,
+        .bookings-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .bookings-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .bookings-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .accept-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .accept-btn:hover {
+            background-color: #218838;
+        }
+        .reject-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .reject-btn:hover {
+            background-color: #c82333;
+        }
+        .revert-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+        .revert-btn:hover {
+            background-color: #e0a800;
+        }
+        .accepted {
+            background-color: #6c757d;
+            color: white;
+            cursor: not-allowed;
+        }
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">
+            Welcome, {{.Username}}!
+        </div>
+        <a href="/logout" class="logout-btn">Log Out</a>
+    </div>
+    <div class="content">
+        <a href="/admin" class="back-btn">← Back to Dashboard</a>
+        <h1>Room Booking Management</h1>
+        <table class="bookings-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Room Number</th>
+                    <th>Booking Date</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Bookings}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Phone}}</td>
+                    <td>{{.RoomNumber}}</td>
+                    <td>{{.BookingDate.Format "2006-01-02"}}</td>
+                    <td>{{.CreatedAt.Format "2006-01-02 15:04:05"}}</td>
+                    <td>
+                        {{if .IsApproved.Valid}}
+                            {{if .IsApproved.Bool}}
+                                <button class="action-btn accepted" disabled>Accepted</button>
+                                <button class="action-btn revert-btn" onclick="revertBooking({{.ID}})">Revert</button>
+                            {{else}}
+                                <button class="action-btn accepted" disabled>Rejected</button>
+                                <button class="action-btn revert-btn" onclick="revertBooking({{.ID}})">Revert</button>
+                            {{end}}
+                        {{else}}
+                            <button class="action-btn accept-btn" onclick="approveBooking({{.ID}})">Accept</button>
+                            <button class="action-btn reject-btn" onclick="rejectBooking({{.ID}})">Reject</button>
+                        {{end}}
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function approveBooking(id) {
+            fetch('/admin/approve-booking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'booking_id=' + id
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+
+        function rejectBooking(id) {
+            fetch('/admin/reject-booking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'booking_id=' + id
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+
+        function revertBooking(id) {
+            fetch('/admin/revert-booking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'booking_id=' + id
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

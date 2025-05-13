@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Build Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: black;
+            padding: 0;
+            color: #D4B88B;
+        }
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #D4B88B;
+        }
+        .navbar-brand {
+            color: #D4B88B;
+            font-size: 1.2rem;
+        }
+        .logout-btn {
+            background-color: #6384b3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            background-color: #4a6a99;
+        }
+        .content {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .request-form {
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #D4B88B;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #D4B88B;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #D4B88B;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: black;
+            color: #D4B88B;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #6384b3;
+        }
+        .submit-btn {
+            background-color: #6384b3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .submit-btn:hover {
+            background-color: #4a6a99;
+        }
+        .error {
+            color: #ff6b6b;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        h1 {
+            color: #D4B88B;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">
+            Welcome, {{.Username}}!
+        </div>
+        <a href="/logout" class="logout-btn">Log Out</a>
+    </div>
+    <div class="content">
+        <h1>Repair Request Form</h1>
+        <form action="/submit-request" method="POST">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="apartment">Apartment Number:</label>
+                <input type="text" id="apartment" name="apartment" required>
+            </div>
+            <div class="form-group">
+                <label for="repairType">Repair Type:</label>
+                <select id="repairType" name="repairType" required>
+                    <option value="">Select repair type</option>
+                    <option value="plumbing">Plumbing</option>
+                    <option value="electrical">Electrical</option>
+                    <option value="painting">Painting</option>
+                    <option value="carpentry">Carpentry</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea id="comment" name="comment" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Request</button>
+        </form>
+        <a href="/user" class="back-btn">← Back to Dashboard</a>
+    </div>
+</body>
+</html> 
