@@ -31,7 +31,6 @@ func SubmitBookingHandler(w http.ResponseWriter, r *http.Request) { // функ�
 		return
 	}
 
-	name := r.FormValue("name") // получение имени пользователя из формы
 	phone := r.FormValue("phone") // получение номера телефона из формы
 	roomNumber := r.FormValue("room") // получение номера комнаты из формы
 	bookingDate := r.FormValue("booking_date") // получение даты бронирования из формы
@@ -59,7 +58,7 @@ func SubmitBookingHandler(w http.ResponseWriter, r *http.Request) { // функ�
 	_, err = database.DB.Exec(`
 		INSERT INTO room_bookings (name, phone, room_number, booking_date)
 		VALUES ($1, $2, $3, $4)
-	`, name, phone, roomNumber, bookingDate) // вставка бронирования в бд
+	`, username, phone, roomNumber, bookingDate) // вставка бронирования в бд
 
 	if err != nil { // проверка на ошибку
 		http.Error(w, "Server error", http.StatusInternalServerError) // вывод ошибки
